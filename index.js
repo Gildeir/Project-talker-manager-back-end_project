@@ -1,13 +1,21 @@
 const express = require('express');
+
 const bodyParser = require('body-parser');
+
 const {
   fsFetchTalker,
 } = require('./fsFetchTalker');
 
+const logingValidation = require('./loginValidation');
+
 const app = express();
+
 app.use(bodyParser.json());
 
+app.use('/login', logingValidation);
+
 const HTTP_OK_STATUS = 200;
+
 const PORT = '3000';
 
 // não remova esse endpoint, é para o avaliador funcionar
