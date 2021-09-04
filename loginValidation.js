@@ -4,7 +4,7 @@ const router = express.Router();
 
 const crypto = require('crypto');
 
-const tokenGenerator = crypto.randomBytes(8).toString('hex');
+const token = crypto.randomBytes(8).toString('hex');
 
 const isValidEmail = (req, res, next) => {
   const regexChecker = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g;
@@ -44,7 +44,7 @@ const isValidPassword = (req, res, next) => {
 
 router.post('/', isValidEmail, isValidPassword, (_req, res) => {
   res.status(200).json({
-    tokenGenerator,
+    token,
   });
 });
 

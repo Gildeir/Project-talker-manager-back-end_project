@@ -1,18 +1,19 @@
 const express = require('express');
 
+const app = express();
+
 const bodyParser = require('body-parser');
 
-const {
-  fsFetchTalker,
-} = require('./fsFetchTalker');
+const { fsFetchTalker } = require('./fsFetchTalker');
 
 const logingValidation = require('./loginValidation');
-
-const app = express();
+const talker = require('./addingTalkerRouter');
 
 app.use(bodyParser.json());
 
 app.use('/login', logingValidation);
+
+app.use('/talker', talker);
 
 const HTTP_OK_STATUS = 200;
 
