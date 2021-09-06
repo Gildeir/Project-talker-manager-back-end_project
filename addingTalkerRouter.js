@@ -17,7 +17,7 @@ router.get('/', async (_req, res) => {
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
   const data = await fsFetchTalker();
-  const found = data.find((item) => item.id === Number(id));
+  const found = data.find((item) => item.id === (+id));
   if (!found) {
     return res.status(404).json({
       message: 'Pessoa palestrante não encontrada',
@@ -135,6 +135,33 @@ router.post('/',
         data.push(addingNewTalker);
         fs.writeFile('./talker.json', JSON.stringify(data));
         return res.status(201).json({ ...addingNewTalker });
+      })
+      .catch((err) => res.status(400).json(err));
+  });
+
+router.put('/:id',
+  isValidToken,
+  isValidName,
+  isValidAge,
+  isValidTalk,
+  isValidWatchedAt,
+  isValidRate,
+  (req, res) => {
+    fs.readFile(arquivo, 'utf8')
+      .then((talkerInf) => JSON.parse(talkerInf))
+      .then((talkerInf) => {
+        const {
+          id,
+        } = req.params;
+        const filteringTalker = talkerInf.filter((talker) => talker.id !== (+id));
+        const catchTalker = {
+          ...req.body,
+          id: (+id),
+        };
+        filteringTalker.push(catchTalker);
+        const data = filteringTalker;
+        fs.writeFile('./talker.json', JSON.stringify(data));
+        return res.status(200).json(catchTalker);
       })
       .catch((err) => res.status(400).json(err));
   });
