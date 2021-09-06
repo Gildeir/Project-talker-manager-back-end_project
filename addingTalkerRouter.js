@@ -166,4 +166,22 @@ router.put('/:id',
       .catch((err) => res.status(400).json(err));
   });
 
+      router.delete('/:id',
+        isValidToken,
+        (req, res) => {
+          fs.readFile(arquivo, 'utf8')
+            .then((talkerInf) => JSON.parse(talkerInf))
+            .then((talkerInf) => {
+              const {
+                id,
+              } = req.params;
+              const filteringTalker = talkerInf.find((talker) => talker.id !== (+id));
+              const data = filteringTalker;
+              fs.writeFile('./talker.json', JSON.stringify(data));
+              return res.status(200).json({
+                message: 'Pessoa palestrante deletada com sucesso',
+              });
+            })
+            .catch((err) => res.status(400).json(err));
+        });
 module.exports = router;
